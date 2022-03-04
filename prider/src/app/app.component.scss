@@ -1,0 +1,10 @@
+#outer
+{
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#inner-body{
+  flex-grow: 1;
+}
