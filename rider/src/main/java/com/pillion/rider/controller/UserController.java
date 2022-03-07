@@ -4,8 +4,12 @@ import com.pillion.rider.model.User;
 import com.pillion.rider.model.UserData;
 import com.pillion.rider.service.UserService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +37,11 @@ public class UserController {
   @PostMapping("/user")
   public User saveUser(@RequestBody UserData userData) {
     return userService.saveUser(userData);
+  }
+
+  @GetMapping("/user/name")
+  public Map<String, String> getName(@AuthenticationPrincipal(expression = "attributes['name']") String username) {
+    return Collections.singletonMap("name", username);
   }
 
 }

@@ -44,7 +44,7 @@ public class CustomOAuthAuthenticationHandler
         OAuth2AuthorizedClient client = oAuth2AuthorizedClientService.loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
         String accessToken = client.getAccessToken().getTokenValue();
         response.getWriter().write(mapper.writeValueAsString(Collections.singletonMap("accessToken", accessToken)));
-        userService.addLoggedIn(accessToken, user.getEmail(), authentication);
+        userService.addLoggedIn(accessToken, user.getEmail());
 
         // new DefaultRedirectStrategy().sendRedirect(request, response, "/user");
     }

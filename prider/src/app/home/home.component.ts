@@ -1,3 +1,4 @@
+import { SecurityService } from './../security.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -8,13 +9,13 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private securityService: SecurityService) { }
 
   ngOnInit(): void {
   }
 
-  getStarted(): void {
-    this.router.navigateByUrl('/');
+  login() {
+    this.securityService.login();
   }
 
 }

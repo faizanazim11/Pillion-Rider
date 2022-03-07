@@ -30,8 +30,6 @@ public class UserService implements UserDetailsService {
   @Autowired
   private CurrentLoggedInUsersRepository currentLoggedInUsersRepository;
 
-  private final HashMap<String, Authentication> authStore = new HashMap<>();
-
   public List<User> getUsers() {
     return userRepository.findAll();
   }
@@ -76,7 +74,7 @@ public class UserService implements UserDetailsService {
     userRepository.save(user);
   }
 
-  public void addLoggedIn(String token, String email, Authentication auth){
+  public void addLoggedIn(String token, String email){
     token = token.replace('.', ' ');
     if(currentLoggedInUsersRepository.findAll().isEmpty())
     {
@@ -86,7 +84,8 @@ public class UserService implements UserDetailsService {
     if(currentLoggedInUsers.getLoggedIn().isEmpty())
     {
       currentLoggedInUsers.getLoggedIn().put(token, email);
-      authStore.put(email.replace('.', ' '), auth);
+      System.out.println(token);
+      System.out.println(email);
       currentLoggedInUsersRepository.deleteAll();
       currentLoggedInUsersRepository.save(currentLoggedInUsers);
       return;
@@ -102,20 +101,12 @@ public class UserService implements UserDetailsService {
         }
       }
       currentLoggedInUsers.getLoggedIn().remove(gotToken);
-      authStore.remove(email);
     }
     currentLoggedInUsers.getLoggedIn().put(token, email);
-    authStore.put(email.replace('.', ' '), auth);
+    System.out.println(token);
+    System.out.println(email);
     currentLoggedInUsersRepository.deleteAll();
     currentLoggedInUsersRepository.save(currentLoggedInUsers);
-  }
-
-  public Authentication getAuthentication(String token){
-    token = token.replace('.', ' ');
-    if(currentLoggedInUsersRepository.findAll().isEmpty())
-      return null;
-    CurrentLoggedInUsers currentLoggedInUsers = currentLoggedInUsersRepository.findAll().get(0);
-    return authStore.get(currentLoggedInUsers.getLoggedIn().get(token).replace('.', ' '));
   }
 
 }
