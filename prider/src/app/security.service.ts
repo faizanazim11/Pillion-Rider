@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from './../environments/environment';
 import { Injectable } from '@angular/core';
@@ -17,6 +18,10 @@ export class SecurityService {
 
   login() {
     window.open(this.baseUrl+this.authorizeEndpoint, '_self');
+  }
+
+  logout() {
+    this.http.get(this.baseUrl+"/logout");
   }
 
   updateToken(token:string) {

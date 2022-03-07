@@ -1,0 +1,15 @@
+#redirecting {
+  display: flex;
+  flex-grow: 1;
+  background-color: rgb(24, 134, 134);
+  flex-direction: row;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+#redirecting span {
+  font-size: 80px;
+}

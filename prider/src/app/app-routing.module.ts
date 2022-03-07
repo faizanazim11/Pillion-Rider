@@ -10,6 +10,9 @@ const routes: Routes = [
     path:'', pathMatch: 'full', component: HomeComponent
   },
   {
+    path:'home', component:HomeComponent
+  },
+  {
     path:'console', component: AppConsoleComponent, canActivate: [AuthGuard]
   },
   {
