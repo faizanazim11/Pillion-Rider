@@ -1,8 +1,7 @@
 package com.pillion.rider.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,9 +27,9 @@ public class User {
     private String password;
     
     private String profileImage;
-    
-    private LinkedList<String> friends;
-    
+
+    private String role;
+
     private HashMap<String, Double> lastLocation;
 
     private Date lastLogin;
@@ -41,7 +40,7 @@ public class User {
         this.email = userData.getEmail();
         this.password = userData.getPassword();
         this.profileImage = userData.getProfileImage();
-        this.friends = null;
+        this.role = "USER_ROLE";
         this.lastLocation = null;
         this.lastLogin = null;   
     }
