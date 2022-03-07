@@ -1,14 +1,20 @@
 package com.pillion.rider.service;
 
+import com.pillion.rider.model.CurrentLoggedInUsers;
 import com.pillion.rider.model.CustomUserDetails;
 import com.pillion.rider.model.User;
 import com.pillion.rider.model.UserData;
+import com.pillion.rider.repository.CurrentLoggedInUsersRepository;
 import com.pillion.rider.repository.UserRepository;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +26,11 @@ public class UserService implements UserDetailsService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private CurrentLoggedInUsersRepository currentLoggedInUsersRepository;
+
+  private final HashMap<String, Authentication> authStore = new HashMap<>();
 
   public List<User> getUsers() {
     return userRepository.findAll();
@@ -63,6 +74,48 @@ public class UserService implements UserDetailsService {
     User user =  ouser.get();
     user.setLastLogin(new Date());
     userRepository.save(user);
+  }
+
+  public void addLoggedIn(String token, String email, Authentication auth){
+    token = token.replace('.', ' ');
+    if(currentLoggedInUsersRepository.findAll().isEmpty())
+    {
+      currentLoggedInUsersRepository.save(new CurrentLoggedInUsers(new HashMap<>()));
+    }
+    CurrentLoggedInUsers currentLoggedInUsers = currentLoggedInUsersRepository.findAll().get(0);
+    if(currentLoggedInUsers.getLoggedIn().isEmpty())
+    {
+      currentLoggedInUsers.getLoggedIn().put(token, email);
+      authStore.put(email.replace('.', ' '), auth);
+      currentLoggedInUsersRepository.deleteAll();
+      currentLoggedInUsersRepository.save(currentLoggedInUsers);
+      return;
+    }
+    if(currentLoggedInUsers.getLoggedIn().containsValue(email))
+    {
+      String gotToken = null;
+      for (Entry<String, String> mapp : currentLoggedInUsers.getLoggedIn().entrySet()) {
+        if(mapp.getValue().equals(email))
+        {
+          gotToken = mapp.getKey();
+          break;
+        }
+      }
+      currentLoggedInUsers.getLoggedIn().remove(gotToken);
+      authStore.remove(email);
+    }
+    currentLoggedInUsers.getLoggedIn().put(token, email);
+    authStore.put(email.replace('.', ' '), auth);
+    currentLoggedInUsersRepository.deleteAll();
+    currentLoggedInUsersRepository.save(currentLoggedInUsers);
+  }
+
+  public Authentication getAuthentication(String token){
+    token = token.replace('.', ' ');
+    if(currentLoggedInUsersRepository.findAll().isEmpty())
+      return null;
+    CurrentLoggedInUsers currentLoggedInUsers = currentLoggedInUsersRepository.findAll().get(0);
+    return authStore.get(currentLoggedInUsers.getLoggedIn().get(token).replace('.', ' '));
   }
 
 }

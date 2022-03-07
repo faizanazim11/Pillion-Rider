@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.pillion.rider.service.UserService;
 import com.pillion.rider.util.CustomOAuthAuthenticationHandler;
+import com.pillion.rider.util.TokenFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -29,6 +31,9 @@ public class UserConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenFilter tokenFilter;
 
     @Autowired
     private CustomOAuthAuthenticationHandler customOAuthAuthenticationHandler;
@@ -54,6 +59,8 @@ public class UserConfig extends WebSecurityConfigurerAdapter{
          .successHandler(customOAuthAuthenticationHandler)
          .and()
          .csrf().disable();
+
+        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
     
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService()
