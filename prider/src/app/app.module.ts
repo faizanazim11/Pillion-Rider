@@ -24,7 +24,6 @@ import { HomeComponent } from './home/home.component';
 import { AppConsoleComponent } from './app-console/app-console.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CallbackComponent } from './callback/callback.component';
-import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { LogoutComponent } from './logout/logout.component';
     HomeComponent,
     AppConsoleComponent,
     CallbackComponent,
-    LogoutComponent
   ],
   imports: [
     BrowserModule,
