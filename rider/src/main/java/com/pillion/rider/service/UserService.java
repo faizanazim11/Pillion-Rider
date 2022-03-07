@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
     return user.map(CustomUserDetails::new).get();
   }
 
-  public String processOAuthPostLogin(DefaultOidcUser oAuth2User) {
+  public void processOAuthPostLogin(DefaultOidcUser oAuth2User) {
     Optional<User> ouser = userRepository.findByEmail(oAuth2User.getEmail());
     if (!ouser.isPresent()) {
       User user = new User();
@@ -58,11 +58,11 @@ public class UserService implements UserDetailsService {
       user.setLastLogin(new Date());
       userRepository.save(user);
       System.out.println("Save OAuth!");
-      return "ROLE_USER";
+      return;
     }
-    ouser.get().setLastLogin(new Date());
-    UserDetails userDetails = loadUserByUsername(oAuth2User.getEmail());
-    return "ROLE_USER";
+    User user =  ouser.get();
+    user.setLastLogin(new Date());
+    userRepository.save(user);
   }
 
 }

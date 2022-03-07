@@ -6,7 +6,6 @@ import com.pillion.rider.service.UserService;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +19,6 @@ public class UserController {
 
   @Autowired
   private UserService userService;
-
-  @Autowired
-  private OAuth2AuthorizedClientService clientService;
-
 
   @GetMapping("/user")
   public List<User> getAll() {
