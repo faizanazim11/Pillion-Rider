@@ -4,7 +4,7 @@ import com.pillion.rider.model.User;
 import com.pillion.rider.model.UserData;
 import com.pillion.rider.service.UserService;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +39,12 @@ public class UserController {
     return userService.saveUser(userData);
   }
 
-  @GetMapping("/user/name")
-  public Map<String, String> getName(@AuthenticationPrincipal(expression = "attributes['name']") String username) {
-    return Collections.singletonMap("name", username);
+  @GetMapping("/user/profile")
+  public Map<String, String> getName(@AuthenticationPrincipal(expression = "attributes['name']") String username, @AuthenticationPrincipal(expression = "attributes['picture']") String picture) {
+    Map<String, String> res = new HashMap<>();
+    res.put("name", username);
+    res.put("picture", picture);
+    return res;
   }
 
 }
