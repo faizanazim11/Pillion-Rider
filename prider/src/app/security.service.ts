@@ -21,6 +21,7 @@ export class SecurityService {
   }
 
   logout() {
+    this.updateToken('token');
     this.http.get(this.baseUrl+"/logout");
   }
 
@@ -38,7 +39,8 @@ export class SecurityService {
 
   isLoggedIn(): boolean {
     const token = this.getToken();
-    return token!=null;
+    console.log(token);
+    return token!=="token";
   }
 
 }
