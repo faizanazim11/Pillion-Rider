@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+declare const google: any;
 
 @Component({
   selector: 'app-app-console',
@@ -11,14 +11,45 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppConsoleComponent implements OnInit {
 
-  name;
+  location: any;
+  map:any;
+  mapElement: any;
 
   constructor(private http: HttpClient, private router: Router) {
-    this.name = "Dummy";
+  }
+
+  get_location(): void {
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          this.location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          this.map = new google.maps.Map(this.mapElement, {
+            center: this.location,
+            zoom: 14,
+          });
+        }
+      );
+    }
+    else
+    {
+      this.location = {
+        lat: 27.2046,
+        lng: 77.4977
+      };
+      this.map = new google.maps.Map(this.mapElement, {
+        center: this.location,
+        zoom: 14,
+      });
+    }
+
   }
 
   ngOnInit(): void {
-    this.http.get<any>(environment.baseUrl+'/user/name').subscribe(data=>{this.name = data.name});
+    this.mapElement = document.getElementById("mapElement");
+    this.get_location();
   }
 
   logout() :void {
