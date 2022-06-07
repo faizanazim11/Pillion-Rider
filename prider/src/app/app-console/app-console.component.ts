@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 declare const google: any;
 
-let arr: any[]=[];
+let arr: any[] = [];
 let previousCoord: number;
 
 @Component({
@@ -21,21 +21,29 @@ export class AppConsoleComponent implements OnInit {
   profile: any;
   picture: any;
   name: any;
-  
+
+  locations = [
+    ['Bondi Beach', -33.890542, 151.274856, 4],
+    ['Coogee Beach', -33.923036, 151.259052, 5],
+    ['Cronulla Beach', -34.028249, 151.157507, 3],
+    ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+    ['Maroubra Beach', -33.950198, 151.259302, 1]
+  ];
+
   constructor(private http: HttpClient, private router: Router) {
   }
 
-  place_marker(locationClick: any): void {
-    this.marker = new google.maps.Marker({
-      position: locationClick,
-      map: this.map
-    });
-    
-    
-  }
+  // place_marker(locationClick: any): void {
+  //   this.marker = new google.maps.Marker({
+  //     position: locationClick,
+  //     map: this.map
+  //   });
 
 
-  get_distance(origin: any,destination: any):any{
+  // }
+
+
+  get_distance(origin: any, destination: any): any {
     const service = new google.maps.DistanceMatrixService();
     const request = {
       origins: [origin],
@@ -53,10 +61,6 @@ export class AppConsoleComponent implements OnInit {
   }
 
   get_location(): void {
-
-    console.log("Length",arr.length);
-
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => {
@@ -65,29 +69,37 @@ export class AppConsoleComponent implements OnInit {
             lng: position.coords.longitude,
           };
           this.map = new google.maps.Map(this.mapElement, {
-            center: this.location,
+            // center: this.location,
+            center: new google.maps.LatLng(-33.92, 151.25),
             zoom: 14,
           });
 
-          this.map.addListener("click", (clickEvent: { latLng: any; }) => {
-            console.log("Mouse Event", clickEvent);
-            this.place_marker(clickEvent.latLng);
+          var i;
 
-            console.log("Latitude & Longitude",clickEvent.latLng.toJSON());
-            arr.push(clickEvent.latLng.toJSON());
-            console.log("Array", arr);
-            if(arr.length==2)
-            {
-              previousCoord=1;
-              this.get_distance(arr[0],arr[1]);
-            }
-            if(arr.length>2)
-            {
-              this.get_distance(arr[previousCoord],arr[previousCoord+1]);
-              previousCoord=previousCoord+1;
-            }
-           
-          });
+          for (i = 0; i < this.locations.length; i++) {
+            this.marker = new google.maps.Marker({
+              position: new google.maps.LatLng(this.locations[i][1], this.locations[i][2]),
+              map: this.map
+            });
+          }
+
+          // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
+          //   console.log("Mouse Event", clickEvent);
+          //   // this.place_marker(clickEvent.latLng);
+
+          //   console.log("Latitude & Longitude", clickEvent.latLng.toJSON());
+          //   arr.push(clickEvent.latLng.toJSON());
+          //   console.log("Array", arr);
+          //   if (arr.length == 2) {
+          //     previousCoord = 1;
+          //     this.get_distance(arr[0], arr[1]);
+          //   }
+          //   if (arr.length > 2) {
+          //     this.get_distance(arr[previousCoord], arr[previousCoord + 1]);
+          //     previousCoord = previousCoord + 1;
+          //   }
+
+          // });
 
 
 
@@ -112,7 +124,7 @@ export class AppConsoleComponent implements OnInit {
         }
       );
 
-     
+
 
     }
     else {
