@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 declare const google: any;
 
 let arr: any[]=[];
+let previousCoord: number;
 
 @Component({
   selector: 'app-app-console',
@@ -20,7 +21,7 @@ export class AppConsoleComponent implements OnInit {
   profile: any;
   picture: any;
   name: any;
-
+  
   constructor(private http: HttpClient, private router: Router) {
   }
 
@@ -29,11 +30,33 @@ export class AppConsoleComponent implements OnInit {
       position: locationClick,
       map: this.map
     });
+    
+    
   }
 
 
+  get_distance(origin: any,destination: any):any{
+    const service = new google.maps.DistanceMatrixService();
+    const request = {
+      origins: [origin],
+      destinations: [destination],
+      travelMode: google.maps.TravelMode.DRIVING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+      avoidHighways: false,
+      avoidTolls: false,
+    };
+
+    service.getDistanceMatrix(request).then((response: any) => {
+      console.log("Distance", response);
+    }
+    );
+  }
 
   get_location(): void {
+
+    console.log("Length",arr.length);
+
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => {
@@ -53,7 +76,20 @@ export class AppConsoleComponent implements OnInit {
             console.log("Latitude & Longitude",clickEvent.latLng.toJSON());
             arr.push(clickEvent.latLng.toJSON());
             console.log("Array", arr);
+            if(arr.length==2)
+            {
+              previousCoord=1;
+              this.get_distance(arr[0],arr[1]);
+            }
+            if(arr.length>2)
+            {
+              this.get_distance(arr[previousCoord],arr[previousCoord+1]);
+              previousCoord=previousCoord+1;
+            }
+           
           });
+
+
 
           var myicon = {
             url: this.picture,
@@ -75,6 +111,9 @@ export class AppConsoleComponent implements OnInit {
           });
         }
       );
+
+     
+
     }
     else {
       this.location = {
