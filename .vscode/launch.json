@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-RiderApplication<rider>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.pillion.rider.RiderApplication",
+            "projectName": "rider",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
