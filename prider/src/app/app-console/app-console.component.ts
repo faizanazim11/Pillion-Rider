@@ -84,18 +84,22 @@ export class AppConsoleComponent implements OnInit {
         title: this.locations[i][0],
       });
       var icon = { url:" http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
-    google.maps.event.addListener(this.marker, 'click', (function (marker, i) {
-      return function () {
+    google.maps.event.addListener(this.marker, 'click', ( (marker, i) => {
+      return  () => {
         marker.setIcon(icon);
-        console.log(i);
+        console.log("Icon Clicked",i);
       }
     })(this.marker, i));
-    // google.maps.event.addListener(this.marker, 'mouseover', (function (marker, i) {
-    //   return function () {
-    //     infowindow.setContent("Data");
-    //     infowindow.open(this.map, marker);
-    //   }
-    // })(this.marker, i));
+    google.maps.event.addListener(this.marker, 'mouseover', ( (marker, i) => {
+      var infowindow = new google.maps.InfoWindow({
+        content: this.locations[i][0],
+        map: this.map
+      });
+      return  () => {
+        infowindow.open(this.map, marker);
+      }
+    })(this.marker, i));
+
 
     }
 
@@ -116,7 +120,7 @@ export class AppConsoleComponent implements OnInit {
             zoom: 14,
           });
 
-          this.addMarker();
+
 
           // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
           //   console.log("Mouse Event", clickEvent);
@@ -135,10 +139,6 @@ export class AppConsoleComponent implements OnInit {
           //   }
 
           // });
-
-
-
-
           var myicon = {
             url: this.picture,
             scaledSize: new google.maps.Size(32, 32),
@@ -157,6 +157,7 @@ export class AppConsoleComponent implements OnInit {
             map: this.map,
             label: { text: mlabel, color: "white" },
           });
+          this.addMarker();
         }
       );
 
