@@ -74,6 +74,7 @@ export class AppConsoleComponent implements OnInit {
 
 
   addMarker(): void {
+    var infowindow = new google.maps.InfoWindow();
     for(var i =0;i<=this.locations.length;i++) {
 
       this.marker = new google.maps.Marker({
@@ -86,8 +87,16 @@ export class AppConsoleComponent implements OnInit {
     google.maps.event.addListener(this.marker, 'click', (function (marker, i) {
       return function () {
         marker.setIcon(icon);
+        console.log(i);
       }
     })(this.marker, i));
+    // google.maps.event.addListener(this.marker, 'mouseover', (function (marker, i) {
+    //   return function () {
+    //     infowindow.setContent("Data");
+    //     infowindow.open(this.map, marker);
+    //   }
+    // })(this.marker, i));
+
     }
 
 
@@ -130,24 +139,24 @@ export class AppConsoleComponent implements OnInit {
 
 
 
-          // var myicon = {
-          //   url: this.picture,
-          //   scaledSize: new google.maps.Size(32, 32),
-          //   origin: new google.maps.Point(0, 0),
-          //   anchor: new google.maps.Point(0, 0),
-          // };
-          // console.log(myicon.url);
-          // var mlabel = "";
-          // var namel = this.name.split(" ");
-          // namel.forEach((element: string) => {
-          //   mlabel = mlabel + element.charAt(0);
-          // });
-          // this.markerList = new google.maps.Marker({
-          //   position: this.location,
-          //   icon: myicon,
-          //   map: this.map,
-          //   label: { text: mlabel, color: "white" },
-          // });
+          var myicon = {
+            url: this.picture,
+            scaledSize: new google.maps.Size(32, 32),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(0, 0),
+          };
+          console.log(myicon.url);
+          var mlabel = "";
+          var namel = this.name.split(" ");
+          namel.forEach((element: string) => {
+            mlabel = mlabel + element.charAt(0);
+          });
+          this.marker = new google.maps.Marker({
+            position: this.location,
+            icon: myicon,
+            map: this.map,
+            label: { text: mlabel, color: "white" },
+          });
         }
       );
 
