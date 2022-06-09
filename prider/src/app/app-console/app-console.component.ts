@@ -22,7 +22,6 @@ var dataMain: any;
 
 
 export class AppConsoleComponent implements OnInit {
-
   location: any;
   map: any;
   mapElement: any;
@@ -31,7 +30,6 @@ export class AppConsoleComponent implements OnInit {
   picture: any;
   name: any;
   markerList: any;
-  hello: any;
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
     this.locationService.getLocations().subscribe(data => {
       dataMain = data
@@ -110,8 +108,6 @@ export class AppConsoleComponent implements OnInit {
             center: new google.maps.LatLng(19.19823705853763, 84.74513731923355),
             zoom: 14,
           });
-
-
 
           // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
           //   console.log("Mouse Event", clickEvent);
