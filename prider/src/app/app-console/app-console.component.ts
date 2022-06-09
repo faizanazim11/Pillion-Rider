@@ -75,7 +75,7 @@ export class AppConsoleComponent implements OnInit {
 
   addMarker(): void {
     var infowindow = new google.maps.InfoWindow();
-    for(var i =0;i<=this.locations.length;i++) {
+    for (var i = 0; i <= this.locations.length; i++) {
 
       this.marker = new google.maps.Marker({
         position: new google.maps.LatLng(this.locations[i][1], this.locations[i][2]),
@@ -83,22 +83,22 @@ export class AppConsoleComponent implements OnInit {
         animation: google.maps.Animation.BOUNCE,
         title: this.locations[i][0],
       });
-      var icon = { url:" http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
-    google.maps.event.addListener(this.marker, 'click', ( (marker, i) => {
-      return  () => {
-        marker.setIcon(icon);
-        console.log("Icon Clicked",i);
-      }
-    })(this.marker, i));
-    google.maps.event.addListener(this.marker, 'mouseover', ( (marker, i) => {
-      var infowindow = new google.maps.InfoWindow({
-        content: this.locations[i][0],
-        map: this.map
-      });
-      return  () => {
-        infowindow.open(this.map, marker);
-      }
-    })(this.marker, i));
+      var icon = { url: " http://maps.google.com/mapfiles/ms/icons/green-dot.png" }
+      google.maps.event.addListener(this.marker, 'click', ((marker, i) => {
+        return () => {
+          marker.setIcon(icon);
+          console.log("Icon Clicked", i);
+        }
+      })(this.marker, i));
+      google.maps.event.addListener(this.marker, 'mouseover', ((marker, i) => {
+        var infowindow = new google.maps.InfoWindow({
+          content: this.locations[i][0],
+          map: this.map
+        });
+        return () => {
+          infowindow.open(this.map, marker);
+        }
+      })(this.marker, i));
 
 
     }
