@@ -32,37 +32,18 @@ export class AppConsoleComponent implements OnInit {
   name: any;
   markerList: any;
   hello: any;
-  // locations = [
-  //   ['LHC', 19.201332513758967, 84.74459834768318],
-  //   ['Galleria', 19.1983645157662, 84.74334541230871],
-  //   ['Atrium', 19.196931030120748, 84.745861846777],
-  //   ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-  //   ['Maroubra Beach', -33.950198, 151.259302, 1]
-  // ];
-
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
     this.locationService.getLocations().subscribe(data => {
       dataMain = data
       myKeys = Object.keys(data);
-      console.log(myKeys)
-      // console.log(data[mykeys[]]);
-      // console.log("Hi There", dataMain[myKeys[i]][1]);
     });
-    console.log("Hi", locationAPI.length);
   }
-
   // place_marker(locationClick: any): void {
   //   this.marker = new google.maps.Marker({
   //     position: locationClick,
   //     map: this.map
   //   });
-
-
   // }
-
-
-
-
   get_distance(origin: any, destination: any): any {
     console.log("Hello", locationAPI);
     const service = new google.maps.DistanceMatrixService();
