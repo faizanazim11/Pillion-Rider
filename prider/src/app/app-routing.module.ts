@@ -1,3 +1,4 @@
+import { AdminAppConsoleComponent } from './admin-app-console/admin-app-console.component';
 import { CallbackComponent } from './callback/callback.component';
 import { AppConsoleComponent } from './app-console/app-console.component';
 import { AuthGuard } from './auth.guard';
@@ -7,16 +8,19 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
-    path:'', pathMatch: 'full', component: HomeComponent
+    path: '', pathMatch: 'full', component: HomeComponent
   },
   {
-    path:'home', component:HomeComponent
+    path: 'home', component: HomeComponent
   },
   {
-    path:'console', component: AppConsoleComponent, canActivate: [AuthGuard]
+    path: 'console', component: AppConsoleComponent, canActivate: [AuthGuard]
   },
   {
-    path:'callback', component: CallbackComponent
+    path: 'callback', component: CallbackComponent
+  },
+  {
+    path: 'admin-console', component: AdminAppConsoleComponent
   }
 ];
 

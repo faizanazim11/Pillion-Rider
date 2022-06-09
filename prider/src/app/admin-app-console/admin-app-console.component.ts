@@ -1,9 +1,9 @@
-import { LocationService } from './service/location.service';
+import { Component, OnInit } from '@angular/core';
+// import { LocationService } from './service/location.service';
 import { NavigationCancel, Router } from '@angular/router';
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
-
+import { LocationService } from '../app-console/service/location.service';
 declare const google: any;
 
 let arr: any[] = [];
@@ -12,13 +12,11 @@ let locationAPI: any[] = [];
 let markersArray = [];
 
 @Component({
-  selector: 'app-app-console',
-  templateUrl: './app-console.component.html',
-  styleUrls: ['./app-console.component.scss']
+  selector: 'app-admin-app-console',
+  templateUrl: './admin-app-console.component.html',
+  styleUrls: ['./admin-app-console.component.scss']
 })
-
-
-export class AppConsoleComponent implements OnInit {
+export class AdminAppConsoleComponent implements OnInit {
 
   location: any;
   map: any;
@@ -30,30 +28,15 @@ export class AppConsoleComponent implements OnInit {
   markerList: any;
   locations = [
     ['LHC', 19.201332513758967, 84.74459834768318],
-    ['Galleria', 19.1983645157662, 84.74334541230871 ],
+    ['Galleria', 19.1983645157662, 84.74334541230871],
     ['Atrium', 19.196931030120748, 84.745861846777],
     ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
     ['Maroubra Beach', -33.950198, 151.259302, 1]
   ];
-
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
-
     this.locationService.getLocations().subscribe(data => locationAPI.push(data));
-    console.log("Hi", typeof(this.locations));
-
+    console.log("Hi", typeof (this.locations));
   }
-
-  // place_marker(locationClick: any): void {
-  //   this.marker = new google.maps.Marker({
-  //     position: locationClick,
-  //     map: this.map
-  //   });
-
-
-  // }
-
-
-
 
   get_distance(origin: any, destination: any): any {
     console.log("Hello", locationAPI);
@@ -72,8 +55,6 @@ export class AppConsoleComponent implements OnInit {
     }
     );
   }
-
-
   addMarker(): void {
     var infowindow = new google.maps.InfoWindow();
     for (var i = 0; i <= this.locations.length; i++) {
@@ -100,11 +81,7 @@ export class AppConsoleComponent implements OnInit {
           infowindow.open(this.map, marker);
         }
       })(this.marker, i));
-
-
     }
-
-
   }
 
   get_location(): void {
@@ -120,26 +97,6 @@ export class AppConsoleComponent implements OnInit {
             center: new google.maps.LatLng(19.19823705853763, 84.74513731923355),
             zoom: 14,
           });
-
-
-
-          // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
-          //   console.log("Mouse Event", clickEvent);
-          //   // this.place_marker(clickEvent.latLng);
-
-          //   console.log("Latitude & Longitude", clickEvent.latLng.toJSON());
-          //   arr.push(clickEvent.latLng.toJSON());
-          //   console.log("Array", arr);
-          //   if (arr.length == 2) {
-          //     previousCoord = 1;
-          //     this.get_distance(arr[0], arr[1]);
-          //   }
-          //   if (arr.length > 2) {
-          //     this.get_distance(arr[previousCoord], arr[previousCoord + 1]);
-          //     previousCoord = previousCoord + 1;
-          //   }
-
-          // });
           var myicon = {
             url: this.picture,
             scaledSize: new google.maps.Size(32, 32),
