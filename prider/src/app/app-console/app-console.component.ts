@@ -62,17 +62,15 @@ export class AppConsoleComponent implements OnInit {
 
 
   addMarker(): void {
-    var infowindow = new google.maps.InfoWindow();
 
     for (var i = 0; i < myKeys.length; i++) {
-      console.log("I am Here");
       this.marker = new google.maps.Marker({
         position: new google.maps.LatLng(dataMain[myKeys[i]][0], dataMain[myKeys[i]][1]),
         map: this.map,
         animation: google.maps.Animation.BOUNCE,
         title: myKeys[i],
       });
-      var icon = { url: " http://maps.google.com/mapfiles/ms/icons/green-dot.png" }
+      var icon = { url: " http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
       google.maps.event.addListener(this.marker, 'click', ((marker, i) => {
         return () => {
           marker.setIcon(icon);
@@ -88,11 +86,7 @@ export class AppConsoleComponent implements OnInit {
           infowindow.open(this.map, marker);
         }
       })(this.marker, i));
-
-
     }
-
-
   }
 
   get_location(): void {
@@ -106,7 +100,7 @@ export class AppConsoleComponent implements OnInit {
           this.map = new google.maps.Map(this.mapElement, {
             // center: this.location,
             center: new google.maps.LatLng(19.19823705853763, 84.74513731923355),
-            zoom: 14,
+            zoom: 18,
           });
 
           // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
