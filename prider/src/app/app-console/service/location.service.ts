@@ -11,6 +11,6 @@ export class LocationService {
   getLocations()
   {
     let url = "http://localhost:8080/stops";
-    return this.http.get(url);
+    return this.http.get<any>(url);
   }
 }

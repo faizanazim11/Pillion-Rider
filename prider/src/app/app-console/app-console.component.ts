@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { LocationService } from './service/location.service';
 import { NavigationCancel, Router } from '@angular/router';
 import { environment } from './../../environments/environment';
@@ -10,6 +11,8 @@ let arr: any[] = [];
 let previousCoord: number;
 let locationAPI: any[] = [];
 let markersArray = [];
+var myKeys: any;
+var dataMain: any;
 
 @Component({
   selector: 'app-app-console',
@@ -28,19 +31,24 @@ export class AppConsoleComponent implements OnInit {
   picture: any;
   name: any;
   markerList: any;
-  locations = [
-    ['LHC', 19.201332513758967, 84.74459834768318],
-    ['Galleria', 19.1983645157662, 84.74334541230871 ],
-    ['Atrium', 19.196931030120748, 84.745861846777],
-    ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-    ['Maroubra Beach', -33.950198, 151.259302, 1]
-  ];
+  hello: any;
+  // locations = [
+  //   ['LHC', 19.201332513758967, 84.74459834768318],
+  //   ['Galleria', 19.1983645157662, 84.74334541230871],
+  //   ['Atrium', 19.196931030120748, 84.745861846777],
+  //   ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+  //   ['Maroubra Beach', -33.950198, 151.259302, 1]
+  // ];
 
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
-
-    this.locationService.getLocations().subscribe(data => locationAPI.push(data));
-    console.log("Hi", typeof(this.locations));
-
+    this.locationService.getLocations().subscribe(data => {
+      dataMain = data
+      myKeys = Object.keys(data);
+      console.log(myKeys)
+      // console.log(data[mykeys[]]);
+      // console.log("Hi There", dataMain[myKeys[i]][1]);
+    });
+    console.log("Hi", locationAPI.length);
   }
 
   // place_marker(locationClick: any): void {
@@ -76,13 +84,14 @@ export class AppConsoleComponent implements OnInit {
 
   addMarker(): void {
     var infowindow = new google.maps.InfoWindow();
-    for (var i = 0; i <= this.locations.length; i++) {
 
+    for (var i = 0; i < myKeys.length; i++) {
+      console.log("I am Here");
       this.marker = new google.maps.Marker({
-        position: new google.maps.LatLng(this.locations[i][1], this.locations[i][2]),
+        position: new google.maps.LatLng(dataMain[myKeys[i]][0], dataMain[myKeys[i]][1]),
         map: this.map,
         animation: google.maps.Animation.BOUNCE,
-        title: this.locations[i][0],
+        title: myKeys[i],
       });
       var icon = { url: " http://maps.google.com/mapfiles/ms/icons/green-dot.png" }
       google.maps.event.addListener(this.marker, 'click', ((marker, i) => {
@@ -93,7 +102,7 @@ export class AppConsoleComponent implements OnInit {
       })(this.marker, i));
       google.maps.event.addListener(this.marker, 'mouseover', ((marker, i) => {
         var infowindow = new google.maps.InfoWindow({
-          content: this.locations[i][0],
+          content: myKeys[i],
           map: this.map
         });
         return () => {
