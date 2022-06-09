@@ -39,7 +39,7 @@ export class AppConsoleComponent implements OnInit {
 
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
 
-    this.locationService.getLocations().subscribe(data => locationAPI.push(data));
+    this.locationService.getLocations().subscribe(data => console.log(data));
 
   }
 

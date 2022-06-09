@@ -19,7 +19,7 @@ public class StopsController {
     private StopsService stopsService;
 
     @GetMapping("/stops")
-    public TreeMap<String, ArrayList<Integer>> getStops() {
+    public TreeMap<String, ArrayList<Double>> getStops() {
         return stopsService.getStops();
     }
 

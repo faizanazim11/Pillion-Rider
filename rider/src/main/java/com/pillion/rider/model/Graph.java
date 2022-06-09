@@ -64,7 +64,7 @@ public class Graph {
                 for (String loc : graph.keySet())
                     node.put(loc, 0);
                 node.put(location1, distance);
-                node.put(location2, 1);
+                node.put(location2, 0);
                 for (String loc : graph.keySet())
                     graph.get(loc).put(location2, 0);
                 graph.get(location1).put(location2, distance);
@@ -77,7 +77,7 @@ public class Graph {
                 for (String loc : graph.keySet())
                     node.put(loc, 0);
                 node.put(location2, distance);
-                node.put(location1, 1);
+                node.put(location1, 0);
                 for (String loc : graph.keySet())
                     graph.get(loc).put(location1, 0);
                 graph.get(location2).put(location1, distance);
@@ -91,9 +91,9 @@ public class Graph {
                     node2.put(loc, 0);
                 }
                 node1.put(location2, distance);
-                node1.put(location1, 1);
+                node1.put(location1, 0);
                 node2.put(location1, distance);
-                node2.put(location2, 1);
+                node2.put(location2, 0);
                 for (String loc : graph.keySet()) {
                     graph.get(loc).put(location1, 0);
                     graph.get(loc).put(location2, 0);

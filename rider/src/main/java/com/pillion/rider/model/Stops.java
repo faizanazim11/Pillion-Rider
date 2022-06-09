@@ -19,6 +19,6 @@ public class Stops {
     @Id
     private String id;
 
-    private TreeMap<String, ArrayList<Integer>> stops;
+    private TreeMap<String, ArrayList<Double>> stops;
 
 }

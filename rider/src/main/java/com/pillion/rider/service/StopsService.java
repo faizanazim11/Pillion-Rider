@@ -16,7 +16,7 @@ public class StopsService {
     @Autowired
     private StopsRepository stopsRepository;
 
-    public TreeMap<String, ArrayList<Integer>> getStops() {
+    public TreeMap<String, ArrayList<Double>> getStops() {
         return stopsRepository.findById("stops").orElse(new Stops()).getStops();
     }
 
@@ -24,7 +24,7 @@ public class StopsService {
         Stops stops = stopsRepository.findById("stops").orElse(new Stops());
         if(stops.getId()==null)
             stops.setId("stops");
-        TreeMap<String, ArrayList<Integer>> updatedStops = stops.getStops();
+        TreeMap<String, ArrayList<Double>> updatedStops = stops.getStops();
         if(updatedStops==null)
             updatedStops = new TreeMap<>();
         updatedStops.put(stopsDetails.getStreetName(), stopsDetails.getCoords());

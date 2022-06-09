@@ -1,7 +1,5 @@
 package com.pillion.rider.model;
 
-import java.util.ArrayList;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StopsDetails {
-    
-    private String streetName;
+public class GetPathRequest {
 
-    private ArrayList<Double> coords;
+    private String source;
+
+    private String target;
     
 }
