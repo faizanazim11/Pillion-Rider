@@ -127,6 +127,7 @@ export class AppConsoleComponent implements OnInit {
             // center: this.location,
             center: new google.maps.LatLng(19.19823705853763, 84.74513731923355),
             zoom: 18,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
           });
 
           // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
