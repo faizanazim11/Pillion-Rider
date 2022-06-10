@@ -25,6 +25,7 @@ import { AppConsoleComponent } from './app-console/app-console.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CallbackComponent } from './callback/callback.component';
 import { AdminAppConsoleComponent } from './admin-app-console/admin-app-console.component';
+import { RideeComponent } from './ridee/ridee.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AdminAppConsoleComponent } from './admin-app-console/admin-app-console.
     AppConsoleComponent,
     CallbackComponent,
     AdminAppConsoleComponent,
+    RideeComponent,
   ],
   imports: [
     BrowserModule,

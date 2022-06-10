@@ -1,9 +1,8 @@
-import { Observable } from 'rxjs';
-import { LocationService } from './service/location.service';
 import { NavigationCancel, Router } from '@angular/router';
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { LocationService } from '../app-console/service/location.service';
 
 declare const google: any;
 
@@ -13,15 +12,14 @@ let locationAPI: any[] = [];
 let markersArray = [];
 var myKeys: any;
 var dataMain: any;
-
 @Component({
-  selector: 'app-app-console',
-  templateUrl: './app-console.component.html',
-  styleUrls: ['./app-console.component.scss']
+  selector: 'app-ridee',
+  templateUrl: './ridee.component.html',
+  styleUrls: ['./ridee.component.scss']
 })
 
 
-export class AppConsoleComponent implements OnInit {
+export class RideeComponent implements OnInit {
   location: any;
   map: any;
   mapElement: any;
@@ -37,13 +35,6 @@ export class AppConsoleComponent implements OnInit {
     });
   }
 
-  // place_marker(locationClick: any): void {
-  //   this.marker = new google.maps.Marker({
-  //     position: locationClick,
-  //     map: this.map
-  //   });
-  // }
-  
   get_distance(origin: any, destination: any): any {
     console.log("Hello", locationAPI);
     const service = new google.maps.DistanceMatrixService();

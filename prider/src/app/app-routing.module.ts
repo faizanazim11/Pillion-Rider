@@ -1,3 +1,4 @@
+import { RideeComponent } from './ridee/ridee.component';
 import { AdminAppConsoleComponent } from './admin-app-console/admin-app-console.component';
 import { CallbackComponent } from './callback/callback.component';
 import { AppConsoleComponent } from './app-console/app-console.component';
@@ -21,6 +22,9 @@ const routes: Routes = [
   },
   {
     path: 'admin-console', component: AdminAppConsoleComponent
+  },
+  {
+    path: 'ridee-console', component: RideeComponent
   }
 ];
 

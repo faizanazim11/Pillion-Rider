@@ -9,11 +9,14 @@
           <button class="btn btn-danger m-3" (click)="logout()">Log Out</button>
         </div>
       </div>
+      <button class="btn btn-danger m-3" (click)="reset()">Reset Markers </button>
 
-      <div>
-        <form action="">
-          <label for="" class="">Latitude</label>
-        </form>
-      </div>
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="Coordinate_Place" class="coordinate ml-20">Coordinates : </label>
+            <h6 class="ml-20">{{showLatLong}}</h6>
+            <input type="text"  class=" form-control" id="Coordinate_Place"
+              placeholder="Enter Location Name" class="ml-20">
+          </div>
+        <button type="submit" (click)="saveForm()" class="btn btn-primary ml-20">Submit</button>
     </div>
   </div>

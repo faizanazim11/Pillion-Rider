@@ -6,10 +6,11 @@ import { HttpClient } from '@angular/common/http';
 import { LocationService } from '../app-console/service/location.service';
 declare const google: any;
 
-let arr: any[] = [];
 let previousCoord: number;
 let locationAPI: any[] = [];
 let markersArray = [];
+var myKeys: any;
+var dataMain: any;
 
 @Component({
   selector: 'app-admin-app-console',
@@ -19,6 +20,8 @@ let markersArray = [];
 export class AdminAppConsoleComponent implements OnInit {
 
   location: any;
+  showLatLong: any;
+  floatLatLong: any[] = [];
   map: any;
   mapElement: any;
   marker: any;
@@ -26,20 +29,15 @@ export class AdminAppConsoleComponent implements OnInit {
   picture: any;
   name: any;
   markerList: any;
-  locations = [
-    ['LHC', 19.201332513758967, 84.74459834768318],
-    ['Galleria', 19.1983645157662, 84.74334541230871],
-    ['Atrium', 19.196931030120748, 84.745861846777],
-    ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-    ['Maroubra Beach', -33.950198, 151.259302, 1]
-  ];
+  locname!: string;
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
-    this.locationService.getLocations().subscribe(data => locationAPI.push(data));
-    console.log("Hi", typeof (this.locations));
+    this.locationService.getLocations().subscribe(data => {
+      dataMain = data
+      myKeys = Object.keys(data);
+    });
   }
 
   get_distance(origin: any, destination: any): any {
-    console.log("Hello", locationAPI);
     const service = new google.maps.DistanceMatrixService();
     const request = {
       origins: [origin],
@@ -55,26 +53,28 @@ export class AdminAppConsoleComponent implements OnInit {
     }
     );
   }
+
+  place_marker(locationClick: any): void {
+    this.marker = new google.maps.Marker({
+      position: locationClick,
+      map: this.map
+    });
+    markersArray.push(this.marker);
+  }
+
   addMarker(): void {
     var infowindow = new google.maps.InfoWindow();
-    for (var i = 0; i <= this.locations.length; i++) {
+    for (var i = 0; i <= myKeys.length; i++) {
 
       this.marker = new google.maps.Marker({
-        position: new google.maps.LatLng(this.locations[i][1], this.locations[i][2]),
+        position: new google.maps.LatLng(dataMain[myKeys[i]][0], dataMain[myKeys[i]][1]),
         map: this.map,
         animation: google.maps.Animation.BOUNCE,
-        title: this.locations[i][0],
+        title: myKeys[i],
       });
-      var icon = { url: " http://maps.google.com/mapfiles/ms/icons/green-dot.png" }
-      google.maps.event.addListener(this.marker, 'click', ((marker, i) => {
-        return () => {
-          marker.setIcon(icon);
-          console.log("Icon Clicked", i);
-        }
-      })(this.marker, i));
       google.maps.event.addListener(this.marker, 'mouseover', ((marker, i) => {
         var infowindow = new google.maps.InfoWindow({
-          content: this.locations[i][0],
+          content: myKeys[i],
           map: this.map
         });
         return () => {
@@ -95,7 +95,33 @@ export class AdminAppConsoleComponent implements OnInit {
           this.map = new google.maps.Map(this.mapElement, {
             // center: this.location,
             center: new google.maps.LatLng(19.19823705853763, 84.74513731923355),
-            zoom: 14,
+            zoom: 18,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+          });
+
+
+          this.map.addListener("click", (clickEvent: { latLng: any; }) => {
+            if (markersArray.length <= 0) {
+              console.log("Mouse Event", clickEvent);
+              this.place_marker(clickEvent.latLng);
+
+              console.log("Latitude & Longitude", clickEvent.latLng.toJSON());
+              this.floatLatLong.push(clickEvent.latLng.lat());
+              this.floatLatLong.push(clickEvent.latLng.lng());
+              // this.floatLatLong = clickEvent.latLng.lat();
+              this.showLatLong = JSON.stringify(this.floatLatLong);
+
+              // this.arr.push(JSON.stringify(clickEvent.latLng.toJSON()));
+              // console.log("Array", this.arr);
+              // if (this.arr.length == 2) {
+              //   previousCoord = 1;
+              //   this.get_distance(this.arr[0], this.arr[1]);
+              // }
+              // if (this.arr.length > 2) {
+              //   this.get_distance(this.arr[previousCoord], this.arr[previousCoord + 1]);
+              //   previousCoord = previousCoord + 1;
+              // }
+            }
           });
           var myicon = {
             url: this.picture,
@@ -118,10 +144,8 @@ export class AdminAppConsoleComponent implements OnInit {
           this.addMarker();
         }
       );
-
-
-
     }
+
     else {
       this.location = {
         lat: 27.2046,
@@ -129,10 +153,9 @@ export class AdminAppConsoleComponent implements OnInit {
       };
       this.map = new google.maps.Map(this.mapElement, {
         center: this.location,
-        zoom: 14,
+        zoom: 17,
       });
     }
-
   }
 
   get_profile(): void {
@@ -142,7 +165,6 @@ export class AdminAppConsoleComponent implements OnInit {
       this.picture = data.picture;
       this.name = data.name;
       this.get_location();
-
     });
   }
 
@@ -154,6 +176,17 @@ export class AdminAppConsoleComponent implements OnInit {
   logout(): void {
     this.http.get(environment.baseUrl + '/logout');
     this.router.navigate(['/home']);
+  }
+
+  reset(): void {
+    window.location.reload();
+  }
+
+  saveForm(): void {
+    this.locname = (<HTMLInputElement>document.getElementById('Coordinate_Place')).value;
+    var postDict = { "streetName": this.locname, "coords": this.floatLatLong };
+    this.locationService.postLocations(postDict).subscribe(res => console.log(res));
+    window.location.reload();
   }
 
 }
