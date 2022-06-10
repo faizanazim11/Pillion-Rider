@@ -11,8 +11,8 @@ let arr: any[] = [];
 let previousCoord: number;
 let locationAPI: any[] = [];
 let markersArray = [];
-var myKeys: any;
-var dataMain: any;
+
+
 
 @Component({
   selector: 'app-app-console',
@@ -23,6 +23,7 @@ var dataMain: any;
 
 export class AppConsoleComponent implements OnInit {
   location: any;
+  myKeys: any;
   map: any;
   mapElement: any;
   marker: any;
@@ -30,10 +31,15 @@ export class AppConsoleComponent implements OnInit {
   picture: any;
   name: any;
   markerList: any;
+  dataMain: any;
+  dataArray: any[] = [];
+  locArray: any[] = [];
+  locDistance: any[] = [];
+  apun!:number;
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
     this.locationService.getLocations().subscribe(data => {
-      dataMain = data
-      myKeys = Object.keys(data);
+      this.dataMain = data
+      this.myKeys = Object.keys(data);
     });
   }
 
@@ -43,7 +49,7 @@ export class AppConsoleComponent implements OnInit {
   //     map: this.map
   //   });
   // }
-  
+
   get_distance(origin: any, destination: any): any {
     console.log("Hello", locationAPI);
     const service = new google.maps.DistanceMatrixService();
@@ -58,30 +64,48 @@ export class AppConsoleComponent implements OnInit {
 
     service.getDistanceMatrix(request).then((response: any) => {
       console.log("Distance", response);
+      console.log("Distancing", response["rows"][0]["elements"][0]["distance"]["value"]);
+      this.locDistance.push(response["rows"][0]["elements"][0]["distance"]["value"]);
+      console.log("Logging Distance",this.locDistance);
+      if(this.dataArray.length-1==this.locDistance.length)
+      {
+        this.sendRoutes();
+        window.location.reload();
+
+      }
     }
     );
+    console.log(this.dataArray.length);
   }
 
+  sendRoutes():void
+  {
+    var postDict = { "locations": this.dataArray, "distances": this.locDistance };
+    this.locationService.postRoutes(postDict).subscribe(res => console.log(res));
+  }
 
   addMarker(): void {
 
-    for (var i = 0; i < myKeys.length; i++) {
+    for (var i = 0; i < this.myKeys.length; i++) {
       this.marker = new google.maps.Marker({
-        position: new google.maps.LatLng(dataMain[myKeys[i]][0], dataMain[myKeys[i]][1]),
+        position: new google.maps.LatLng(this.dataMain[this.myKeys[i]][0], this.dataMain[this.myKeys[i]][1]),
         map: this.map,
         animation: google.maps.Animation.BOUNCE,
-        title: myKeys[i],
+        title: this.myKeys[i],
       });
       var icon = { url: " http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
       google.maps.event.addListener(this.marker, 'click', ((marker, i) => {
         return () => {
           marker.setIcon(icon);
           console.log("Icon Clicked", i);
+          this.locArray.push({ lat: this.dataMain[this.myKeys[i]][0], lng: this.dataMain[this.myKeys[i]][1] });
+          this.dataArray.push(this.myKeys[i]);
+          console.log("Selected Location", this.dataArray);
         }
       })(this.marker, i));
       google.maps.event.addListener(this.marker, 'mouseover', ((marker, i) => {
         var infowindow = new google.maps.InfoWindow({
-          content: myKeys[i],
+          content: this.myKeys[i],
           map: this.map
         });
         return () => {
@@ -178,6 +202,19 @@ export class AppConsoleComponent implements OnInit {
 
   reset(): void {
     window.location.reload();
+  }
+
+ async submit(): Promise<void> {
+    console.log("User Submitted", this.dataArray);
+    console.log("User Submitted Coord", this.locArray);
+    if (this.locArray.length >= 2) {
+      for(this.apun =0;this.apun<this.locArray.length-1;this.apun++)
+      {
+      await this.get_distance(this.locArray[this.apun], this.locArray[this.apun+1]);
+      }
+    }
+
+
   }
 
 }

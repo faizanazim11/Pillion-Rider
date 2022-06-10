@@ -17,7 +17,7 @@ export class CallbackComponent implements OnInit {
       this.securityService.fetchToken(p.code, p.state).subscribe(data=> {
         console.log(data.accessToken);
         this.securityService.updateToken(data.accessToken);
-        this.router.navigate(['/console']);
+        // this.router.navigate(['/console']);
         // this.router.navigate(['/admin-console']);
       })
     })

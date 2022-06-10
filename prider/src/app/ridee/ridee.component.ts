@@ -20,6 +20,8 @@ var dataMain: any;
 
 
 export class RideeComponent implements OnInit {
+  result:any[]=[];
+  dataResponse:any;
   location: any;
   map: any;
   mapElement: any;
@@ -28,6 +30,8 @@ export class RideeComponent implements OnInit {
   picture: any;
   name: any;
   markerList: any;
+  dataArray:any[]=[];
+  myKey:any;
   constructor(private http: HttpClient, private router: Router, private locationService: LocationService) {
     this.locationService.getLocations().subscribe(data => {
       dataMain = data
@@ -66,8 +70,15 @@ export class RideeComponent implements OnInit {
       var icon = { url: " http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
       google.maps.event.addListener(this.marker, 'click', ((marker, i) => {
         return () => {
+          if(markersArray.length<=1)
+          {
           marker.setIcon(icon);
           console.log("Icon Clicked", i);
+          this.dataArray.push(myKeys[i]);
+          markersArray.push(marker);
+          console.log("Hello",this.dataArray);
+
+          }
         }
       })(this.marker, i));
       google.maps.event.addListener(this.marker, 'mouseover', ((marker, i) => {
@@ -94,6 +105,7 @@ export class RideeComponent implements OnInit {
             // center: this.location,
             center: new google.maps.LatLng(19.19823705853763, 84.74513731923355),
             zoom: 18,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
           });
 
           // this.map.addListener("click", (clickEvent: { latLng: any; }) => {
@@ -171,4 +183,17 @@ export class RideeComponent implements OnInit {
     window.location.reload();
   }
 
+  async submit():Promise<void>
+  {
+    var postDict = { "source": this.dataArray[0], "target": this.dataArray[1] };
+    this.locationService.postRiders(postDict).subscribe(res => {
+      console.log(res);
+      this.dataResponse = res;
+      this.myKey = Object.keys(res);
+      this.dataArray=[];
+      console.log(this.myKey)
+      console.log(this.dataResponse)
+    });
+
+  }
 }
